@@ -1,12 +1,30 @@
 import requests
+import os
 
-# api for current weather in minneapolis
-weather_url = 'https://api.openweathermap.org/data/2.5/weather?q=minneapolis,mn,us&units=imperial&appid=2bd00eeb43f1c08033f6d59a07cc60ac'
+# storing the API key as an enviroment variable and pulling it
+key = os.environ.get('WEATHER_KEY')
+print(key)
 
-response = requests.get(weather_url)
+# api for current weather in minneapolis imperial units
+# weather_url = f'https://api.openweathermap.org/data/2.5/weather?q=minneapolis,mn,us&units=imperial&appid={key}'
+
+weather_url = 'https://api.openweathermap.org/data/2.5/weather'
+# query = {'q': 'minsk,by', 'units': 'imperial', 'appid': key}
+
+
+# ask the user for the city and country and output weather
+
+city = input('Enter your city: ')
+country = input('Enter the 2 letter country code')
+location = f'{city},{country}'
+
+query = {'q': location, 'units': 'imperial', 'appid': key}
+
+response = requests.get(weather_url, params=query)
 data = response.json()
 
-print(data)
+# print(data)
 
+# grab the temp from the dictionary
 temp = data['main']['temp']
-print(temp)
+print(f'The current temperature in Minneapolis is {temp}F')
